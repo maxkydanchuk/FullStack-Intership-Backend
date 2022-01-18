@@ -5,7 +5,7 @@ import mongoClient from "../../db.js";
 import ChatHelper from "./chat-helper/chat-helper.js";
 
 const chatRepository = new ChatRepository(mongoClient)
-
+let users = [];
 export default function webSocket() {
 
     const io = new Server(server, {
@@ -14,7 +14,26 @@ export default function webSocket() {
         }
     });
 
-    io.on("connection", async (socket) => {
+    io.on("connect", async (socket) => {
+
+        let currentSocketUser;
+
+        socket.on('joinChat', (username) => {
+                currentSocketUser = username
+            if(users.find(item => item === currentSocketUser)) {
+                io.emit('sendUser', users)
+            } else if (!currentSocketUser || currentSocketUser.length === 0) {
+                return false
+            } else {
+                users.push(currentSocketUser);
+                io.emit('sendUser', users)
+            }
+        })
+
+        socket.on('refreshUsers', () => {
+            users = users.filter((item) => item !== currentSocketUser);
+            io.emit('sendUser', users)
+        })
 
         socket.on('sendMessage', async (message) => {
             const newMessage = ChatHelper.createMessageFromBody(message)
@@ -28,10 +47,7 @@ export default function webSocket() {
 
     });
 
-
     io.on('disconnect', () => {
         console.log('disconnected')
     })
 }
-
-
