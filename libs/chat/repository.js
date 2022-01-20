@@ -2,7 +2,7 @@ import {ObjectId} from "mongodb";
 
 export default class ChatRepository {
     constructor(repositoryData) {
-        this.repositoryData = repositoryData.db('StarWarsDatabase').collection('chat');
+        this.repositoryData = repositoryData;
     }
 
     async getAllMessages() {

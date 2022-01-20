@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use(function(err, req, res) {
+app.use(function(req, res, err) {
     res.status(500).send('Something broke!');
     console.error(err)
 });
