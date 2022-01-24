@@ -33,17 +33,11 @@ beforeEach( () => {
    chatRepository = new ChatRepository(mockDb)
 })
 
-it('check if getMessageById returned promise',  () => {
+it('check if getAllMessages returned equal value',  async () => {
+    const result = await chatRepository.getAllMessages();
+    const expectedResult = [mockResultMessage, mockResultMessage];
 
-    jest.spyOn(chatRepository, 'getMessageById');
-
-    expect(chatRepository.getMessageById()).toStrictEqual(resultPromise)
-})
-
-it('check if getMessageById returned equal value',  async () => {
-    jest.spyOn(chatRepository, 'getMessageById');
-
-    expect(await chatRepository.getMessageById()).toEqual(mockResultMessage)
+    expect(result).toEqual(expectedResult)
 })
 
 // websocket connect test
@@ -78,7 +72,6 @@ describe("my awesome project", () => {
             jest.spyOn(chatRepository, 'createMessage');
 
             const result = await chatRepository.createMessage(message)
-
             expect(result).toEqual(mockResultMessage);
             done()
         })
