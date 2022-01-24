@@ -9,6 +9,7 @@ const db = mongoClient.db('StarWarsDatabase').collection('chat');
 const chatRepository = new ChatRepository(db);
 
 let users = [];
+
 export default function webSocket() {
 
     const io = new Server(server, {

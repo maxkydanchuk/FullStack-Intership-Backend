@@ -15,7 +15,13 @@ let mockDb;
 let chatRepository;
 
 const resultPromise = new Promise((resolve) => { resolve()});
-const resultMessage = {
+
+const mockMessage = {
+    username: 'email',
+    message: 'message'
+}
+
+const mockResultMessage = {
     _id: 'id',
     username: 'email',
     message: 'message',
@@ -37,12 +43,12 @@ it('check if getMessageById returned promise',  () => {
 it('check if getMessageById returned equal value',  async () => {
     jest.spyOn(chatRepository, 'getMessageById');
 
-    expect(await chatRepository.getMessageById()).toEqual(resultMessage)
+    expect(await chatRepository.getMessageById()).toEqual(mockResultMessage)
 })
 
-//websocket connect test
+// websocket connect test
 
-describe("WebSockets chat", () => {
+describe("my awesome project", () => {
     let io, serverSocket, clientSocket;
 
     beforeAll((done) => {
@@ -58,27 +64,30 @@ describe("WebSockets chat", () => {
         });
     });
 
-    test("should work", (done) => {
-        clientSocket.on("hello", (arg) => {
-            expect(arg).toBe("world");
+    it('socket connect', (done) => {
+        clientSocket.on('connection', (message) => {
+            expect(message).toBe('connected')
             done();
-        });
-        serverSocket.emit("hello", "world");
-    });
+        })
+        serverSocket.emit('connection', 'connected');
+    })
 
-    test("should work (with ack)", (done) => {
-        serverSocket.on("hi", (cb) => {
-            cb("hola");
-        });
-        clientSocket.emit("hi", (arg) => {
-            expect(arg).toBe("hola");
-            done();
-        });
-    });
+    it('send message', (done) => {
+        clientSocket.emit('sendMessage', mockMessage);
+        serverSocket.on('sendMessage', async (message) => {
+            jest.spyOn(chatRepository, 'createMessage');
+
+            const result = await chatRepository.createMessage(message)
+
+            expect(result).toEqual(mockResultMessage);
+            done()
+        })
+    })
 
     afterAll(() => {
         io.close();
         clientSocket.close();
     });
-
 });
+
+
