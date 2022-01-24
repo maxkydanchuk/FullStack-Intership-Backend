@@ -32,7 +32,7 @@ export default class PeopleController {
     createPerson = async (req, res) => {
         try {
             const result = await this.peopleRepository.createPerson(req.body);
-
+            console.log(result)
             return res.status(201).json(result);
         } catch (e) {
             return res.status(400).json(e);

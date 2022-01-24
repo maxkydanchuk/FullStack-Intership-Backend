@@ -3,10 +3,13 @@ import {escapeRegExp} from '../../utils/utils.js'
 import Person from "./person-model.js";
 
 export default class PeopleRepository {
+    constructor(repositoryData) {
+        this.repositoryData = repositoryData;
+    }
 
     async getAllPeople(sortBy, sortOrder, searchQuery, pageSize, pageNumber) {
 
-        let totalCount = await Person.count();
+        let totalCount = await this.repositoryData.count();
         let options = {};
         let data;
         if (searchQuery !== undefined) {
@@ -17,7 +20,7 @@ export default class PeopleRepository {
 
         if (sortBy === undefined || sortOrder === undefined) {
 
-            data = await Person
+            data = await this.repositoryData
                 .find(options)
                 .skip(pageNumber * pageSize)
                 .limit(pageSize);
@@ -25,7 +28,7 @@ export default class PeopleRepository {
             return {data, totalCount};
         }
 
-        data = await Person
+        data = await this.repositoryData
             .find(options)
             .skip(pageNumber * pageSize)
             .limit(pageSize)
@@ -35,7 +38,7 @@ export default class PeopleRepository {
     }
 
     async getPerson(id) {
-        return await Person.findOne({_id: new ObjectId(id)})
+        return await this.repositoryData.findOne({_id: new ObjectId(id)})
     }
 
     async createPerson(body) {
@@ -51,16 +54,17 @@ export default class PeopleRepository {
                 birth_year: body.fields.birth_year
             }
         });
-        return await newPerson.save()
+
+        return await this.repositoryData.create(newPerson);
 
     }
 
     async updatePerson(id, body) {
-        return await Person.findOneAndUpdate({_id: new ObjectId(id)}, {$set: body})
+        return await this.repositoryData.findOneAndUpdate({_id: new ObjectId(id)}, {$set: body})
     }
 
     async deletePerson(id) {
-        return await Person.findOneAndDelete({_id: new ObjectId(id)});
+        return await this.repositoryData.findOneAndDelete({_id: new ObjectId(id)});
 
     }
 }
