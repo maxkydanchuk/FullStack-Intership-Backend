@@ -1,12 +1,9 @@
 import {Server} from "socket.io";
 import {server} from "../../index.js";
 import ChatRepository from "./repository.js";
-import mongoClient from "../../db.js";
-import ChatHelper from "./chat-helper/chat-helper.js";
+import Message from "./message-model.js";
 
-const db = mongoClient.db('StarWarsDatabase').collection('chat');
-
-const chatRepository = new ChatRepository(db);
+const chatRepository = new ChatRepository(Message);
 
 let users = [];
 
@@ -40,8 +37,7 @@ export default function webSocket() {
         })
 
         socket.on('sendMessage', async (message) => {
-            const newMessage = ChatHelper.createMessageFromBody(message)
-            await chatRepository.createMessage(newMessage);
+            await chatRepository.createMessage(message);
         })
 
         socket.on('requestMessages', async () => {

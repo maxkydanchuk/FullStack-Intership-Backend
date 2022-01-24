@@ -1,12 +1,13 @@
 import {ObjectId} from "mongodb";
+import Message from "./message-model.js";
 
 export default class ChatRepository {
     constructor(repositoryData) {
         this.repositoryData = repositoryData;
     }
-
+    
     async getAllMessages() {
-        return await this.repositoryData.find().toArray();
+        return await this.repositoryData.find();
     }
 
     async getMessageById(id) {
@@ -14,9 +15,13 @@ export default class ChatRepository {
     }
 
     async createMessage(body) {
-        const newMessage = await this.repositoryData.insertOne(body);
+        const newMessage = new Message({
+            username: body.username,
+            message: body.message,
+            time: new Date()
+        })
 
-        return await this.getMessageById(newMessage.insertedId)
+        return await newMessage.save()
     }
 
 }

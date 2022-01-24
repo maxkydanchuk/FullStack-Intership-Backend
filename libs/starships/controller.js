@@ -1,5 +1,3 @@
-import StarshipHelper from "./starship-helper/starship-helper.js";
-
 export default class StarshipsController {
     constructor(starshipsRepository ) {
         this.starshipsRepository = starshipsRepository;
@@ -33,8 +31,7 @@ export default class StarshipsController {
 
     createStarship = async (req, res) => {
         try {
-            const body = StarshipHelper.getDataFromBody(req.body);
-            const result = await this.starshipsRepository.createStarship(body)
+            const result = await this.starshipsRepository.createStarship(req.body)
 
             return res.status(201).json(result);
         } catch (e) {
@@ -44,12 +41,11 @@ export default class StarshipsController {
 
     updateStarship = async (req, res) => {
         try {
-            const body = StarshipHelper.getDataFromBody(req.body);
             const id = req.params.id;
-            await this.starshipsRepository.updateStarship(id, body);
-            const getItem = await this.starshipsRepository.getStarship(id);
+            const result = await this.starshipsRepository.updateStarship(id, req.body);
 
-            return res.status(200).json(getItem);
+            console.log(result)
+            return res.status(200).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }

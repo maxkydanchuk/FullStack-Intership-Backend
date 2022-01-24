@@ -1,5 +1,3 @@
-import PeopleHelper from "./people-helper/people-helper.js";
-
 export default class PeopleController {
     constructor(peopleRepository) {
         this.peopleRepository = peopleRepository;
@@ -33,8 +31,7 @@ export default class PeopleController {
 
     createPerson = async (req, res) => {
         try {
-            const body = PeopleHelper.getDataFromBody(req.body);
-            const result = await this.peopleRepository.createPerson(body);
+            const result = await this.peopleRepository.createPerson(req.body);
 
             return res.status(201).json(result);
         } catch (e) {
@@ -44,12 +41,10 @@ export default class PeopleController {
 
     updatePerson = async (req, res) => {
         try {
-            const body = PeopleHelper.getDataFromBody(req.body);
             const id = req.params.id;
-            await this.peopleRepository.updatePerson(id, body);
-            const getItem = await this.peopleRepository.getPerson(id);
+            const result = await this.peopleRepository.updatePerson(id, req.body);
 
-            return res.status(200).json(getItem);
+            return res.status(200).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }

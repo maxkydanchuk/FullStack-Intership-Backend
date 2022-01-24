@@ -8,10 +8,12 @@ import userRouter from "./libs/users/index.js";
 import bodyParser from "body-parser";
 import * as http from "http";
 import webSocket from "./libs/chat/service.js";
+import  mongoose from "mongoose";
 
 const __dirname = path.resolve();
 const app = express();
 export const server = http.createServer(app);
+const url = 'mongodb://localhost:27017/StarWarsDatabase';
 
 app.use(cors({
     exposedHeaders: ['x-access-token']
@@ -34,5 +36,20 @@ app.use(function(req, res, err) {
 });
 
 
-server.listen(PORT);
+async function start() {
+    try {
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+
+        });
+        server.listen(PORT);
+    } catch (e) {
+        console.log('Server Error: ', e.message);
+        process.exit(1);
+    }
+}
+
+start();
+
 

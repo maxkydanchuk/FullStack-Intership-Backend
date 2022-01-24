@@ -19,7 +19,7 @@ export default class MockDb {
         }
     }
 
-    async insertOne() {
+    async save() {
         return await this.getMessageBydId()
     }
 }

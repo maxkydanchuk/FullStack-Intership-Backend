@@ -1,10 +1,9 @@
 import StarshipsRepository from './repository.js'
 import StarshipsController from './controller.js'
 import StarshipRouter from './router.js';
-import mongoClient from "../../db.js";
 
 
-const starshipRepository = new StarshipsRepository(mongoClient);
+const starshipRepository = new StarshipsRepository();
 
 const starshipController = new StarshipsController(starshipRepository);
 

@@ -21,9 +21,8 @@ export default class UserController {
 
     createUser = async (req, res) => {
         try {
-            const body = UserHelper.createUserFromBody(req.body)
-            await this.userRepository.validateRegisterUser(body);
-            const result = await this.userRepository.createUser(body);
+            await this.userRepository.validateRegisterUser(req.body);
+            const result = await this.userRepository.createUser(req.body);
 
             return res.status(201).json(result);
         } catch (e) {
