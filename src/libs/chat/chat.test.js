@@ -34,6 +34,7 @@ beforeEach( () => {
 })
 
 it('check if getAllMessages returned equal value',  async () => {
+
     const result = await chatRepository.getAllMessages();
     const expectedResult = [mockResultMessage, mockResultMessage];
 

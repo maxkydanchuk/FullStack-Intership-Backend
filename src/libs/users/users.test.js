@@ -25,7 +25,6 @@ beforeEach(() => {
 })
 
 it('check if controller called a mocked repo',  () => {
-    jest.spyOn(mockRepository, 'validateLoginUser');
 
     const mockResponse = httpMocks.createResponse();
     const get = userController.getUser(mockRequest, mockResponse);
@@ -34,7 +33,6 @@ it('check if controller called a mocked repo',  () => {
 })
 
 it('check if getUser returns correct data', async () => {
-    jest.spyOn(userController, 'getUser');
 
     const mockResponse = httpMocks.createResponse();
     const get = await userController.getUser(mockRequest, mockResponse);
@@ -44,7 +42,6 @@ it('check if getUser returns correct data', async () => {
 })
 
 it('check if createUser works', async () => {
-    jest.spyOn(userController, 'createUser');
 
     const mockResponse = httpMocks.createResponse();
     const create = await userController.createUser(mockRequest, mockResponse);

@@ -1,9 +1,8 @@
 import PeopleRepository from "./repository.js";
 import PeopleController from './controller.js'
 import PeopleRouter from './router.js';
-import Person from "./person-model.js";
 
-const peopleRepository = new PeopleRepository(Person);
+const peopleRepository = new PeopleRepository();
 
 const peopleController = new PeopleController(peopleRepository);
 

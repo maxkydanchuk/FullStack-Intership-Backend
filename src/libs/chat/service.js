@@ -1,9 +1,8 @@
 import {Server} from "socket.io";
 import {server} from "../../index.js";
 import ChatRepository from "./repository.js";
-import Message from "./message-model.js";
 
-const chatRepository = new ChatRepository(Message);
+const chatRepository = new ChatRepository();
 
 let users = [];
 

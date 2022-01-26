@@ -1,12 +1,9 @@
 import Message from "./message-model.js";
 
 export default class ChatRepository {
-    constructor(repositoryData) {
-        this.repositoryData = repositoryData;
-    }
 
     async getAllMessages() {
-        return await this.repositoryData.find();
+        return await Message.find();
     }
 
 
@@ -17,7 +14,7 @@ export default class ChatRepository {
             time: new Date()
         })
 
-        return await this.repositoryData.save(newMessage)
+        return await Message.create(newMessage)
     }
 
 }
