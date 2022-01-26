@@ -1,0 +1,54 @@
+version: "3"
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node:16.13.1
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules/bcrypt/
+    ports:
+      - 5000:5000
+    working_dir: /app
+    command: npm run serve
+    depends_on:
+      - mongodb
+    networks:
+      - my_net
+    restart: always
+
+  client:
+    container_name: client
+    image: node:16.13.1
+    volumes:
+      - ../client:/app
+    ports:
+      - 3000:3000
+    working_dir: /app
+    command: npm start
+    depends_on:
+      - server
+    networks:
+      - my_net
+    restart: always
+
+  mongodb:
+    container_name: SWMongodb
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+    networks:
+      - my_net
+    restart: always
+volumes:
+  mongodb:
+
+networks:
+  my_net:
+    driver: bridge
