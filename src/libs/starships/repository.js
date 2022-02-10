@@ -14,20 +14,20 @@ export default class StarshipsRepository {
             }
         }
 
-        if (sortBy === undefined || sortOrder === undefined) {
+        if ((sortBy === undefined || sortBy === 'fields.undefined') || (sortOrder === undefined || sortOrder === '')) {
             const data = await Starship.find(options).skip(pageNumber * pageSize).limit(pageSize);
 
-            return {data, totalCount}
+            return {data, totalCount};
         }
 
         data = await Starship.find(options).sort({[sortBy]: sortOrder}).skip(pageNumber * pageSize).limit(pageSize);
 
         return {data, totalCount};
-    }
+    };
 
     async getStarship(id) {
         return await Starship.findOne({_id: new ObjectId(id)});
-    }
+    };
 
     async createStarship(body) {
         const newStarship = new Starship({
@@ -38,14 +38,18 @@ export default class StarshipsRepository {
                 hyperdrive_rating: body.fields.hyperdrive_rating,
             }
         });
-        return await newStarship.save()
-    }
+
+        return await Starship.create(newStarship);
+    };
 
     async updateStarship(id, body) {
-        return await Starship.findOneAndUpdate({_id: new ObjectId(id)}, body)
-    }
+        const result = await Starship.findOneAndUpdate({_id: new ObjectId(id)}, {$set: body});
+        const resultId = result._id;
+
+        return await Starship.findOne({_id: resultId})
+    };
 
     async deleteStarship(id) {
         return await Starship.findOneAndDelete({_id: new ObjectId(id)});
-    }
+    };
 }

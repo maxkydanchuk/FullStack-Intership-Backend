@@ -1,4 +1,5 @@
 import pkg from 'mongoose';
+
 const {Schema, model} = pkg;
 
 const starshipSchema = new Schema({
@@ -8,7 +9,7 @@ const starshipSchema = new Schema({
         starship_class: String,
         hyperdrive_rating: String,
     }
-})
+});
 
 const Starship = model('Starship', starshipSchema, 'starships');
 

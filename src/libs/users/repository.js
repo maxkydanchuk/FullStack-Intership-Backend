@@ -10,7 +10,7 @@ export default class UserRepository {
         const user = await User.findOne({email: email});
 
         if(user) {
-            throw new Error('user with this email is already exists')
+            throw new Error('User with this email is already exists')
         }
 
         if(!isValidEmail(email)) {
@@ -24,8 +24,9 @@ export default class UserRepository {
         if(password !== confirmPassword) {
             throw new Error ("Passwords didn't match")
         }
-        return true
-    }
+
+        return true;
+    };
 
     async validateLoginUser(body) {
         const { email, password } = body;
@@ -40,20 +41,20 @@ export default class UserRepository {
         if(!isMatchPassword) {
             throw new Error ('Invalid password');
         }
-    }
+    };
 
     async getUser(email) {
-        return await User.findOne({email: email})
-    }
+        return await User.findOne({email: email});
+    };
 
     async createUser(body) {
         const { email, password } = body;
-        const hashedPassword = await UserHelper.encryptPassword(password)
+        const hashedPassword = await UserHelper.encryptPassword(password);
         const newUser = new User({
             email: email,
             password: hashedPassword,
-        })
+        });
 
-        return await newUser.save();
+        return await User.create(newUser);
     }
 }

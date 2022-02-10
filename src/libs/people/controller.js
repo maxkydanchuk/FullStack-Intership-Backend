@@ -16,28 +16,28 @@ export default class PeopleController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     getPerson = async (req, res) => {
         try {
-            const id = req.params.id
+            const id = req.params.id;
             const result = await this.peopleRepository.getPerson(id);
 
             return res.status(200).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     createPerson = async (req, res) => {
         try {
             const result = await this.peopleRepository.createPerson(req.body);
-            console.log(result)
+
             return res.status(201).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     updatePerson = async (req, res) => {
         try {
@@ -48,7 +48,7 @@ export default class PeopleController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     deletePerson = async (req, res) => {
         try {
@@ -60,4 +60,4 @@ export default class PeopleController {
             return await res.status(400).json(e);
         }
     }
-}
+};

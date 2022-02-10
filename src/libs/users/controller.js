@@ -5,7 +5,7 @@ export default class UserController {
         this.userRepository = userRepository;
     }
 
-     async getUser(req, res) {
+    async getUser(req, res) {
         try {
             const body = req.body;
             const {email} = body;
@@ -13,11 +13,11 @@ export default class UserController {
             const result = await this.userRepository.getUser(body.email);
             const token = UserHelper.createToken(result).toString();
 
-            return res.status(200).json({token, email})
+            return res.status(200).json({token, email});
         } catch (e) {
             return res.status(404).json({error: e.message})
         }
-    }
+    };
 
     createUser = async (req, res) => {
         try {
@@ -26,7 +26,7 @@ export default class UserController {
 
             return res.status(201).json(result);
         } catch (e) {
-            return res.status(404).json({error: e.message})
+            return res.status(404).json({error: e.message});
         }
-    }
+    };
 }

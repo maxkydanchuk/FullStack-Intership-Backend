@@ -1,9 +1,9 @@
 export default class StarshipsController {
-    constructor(starshipsRepository ) {
+    constructor(starshipsRepository) {
         this.starshipsRepository = starshipsRepository;
     }
 
-    getAllStarships = async (req, res) =>  {
+    getAllStarships = async (req, res) => {
         try {
             const sortBy = req.query.sortBy;
             const sortOrder = req.query.sortOrder;
@@ -16,7 +16,7 @@ export default class StarshipsController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     getStarship = async (req, res) => {
         try {
@@ -27,31 +27,30 @@ export default class StarshipsController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     createStarship = async (req, res) => {
         try {
-            const result = await this.starshipsRepository.createStarship(req.body)
+            const result = await this.starshipsRepository.createStarship(req.body);
 
             return res.status(201).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     updateStarship = async (req, res) => {
         try {
             const id = req.params.id;
             const result = await this.starshipsRepository.updateStarship(id, req.body);
 
-            console.log(result)
             return res.status(200).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
-      deleteStarship = async (req, res) => {
+    deleteStarship = async (req, res) => {
         try {
             const id = req.params.id;
             await this.starshipsRepository.deleteStarship(id);
@@ -60,5 +59,5 @@ export default class StarshipsController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 }

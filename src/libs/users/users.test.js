@@ -17,20 +17,21 @@ const mockRequest = httpMocks.createRequest(({body: {email: 'email', password: '
 const mockUser = {
     email: 'email',
     password: 'password'
-}
+};
 
 beforeEach(() => {
-     mockRepository = new MockRepository()
-     userController = new UserController(mockRepository);
-})
+    mockRepository = new MockRepository()
+    userController = new UserController(mockRepository);
+});
 
-it('check if controller called a mocked repo',  () => {
+it('check if controller called a mocked repo', () => {
+    jest.spyOn(mockRepository, 'validateLoginUser');
 
     const mockResponse = httpMocks.createResponse();
     const get = userController.getUser(mockRequest, mockResponse);
 
-    expect(mockRepository.validateLoginUser).toBeCalled()
-})
+    expect(mockRepository.validateLoginUser).toBeCalled();
+});
 
 it('check if getUser returns correct data', async () => {
 
@@ -38,22 +39,22 @@ it('check if getUser returns correct data', async () => {
     const get = await userController.getUser(mockRequest, mockResponse);
     const response = get._getJSONData();
 
-    expect(response.email).toEqual('email')
-})
+    expect(response.email).toEqual('email');
+});
 
 it('check if createUser works', async () => {
 
     const mockResponse = httpMocks.createResponse();
     const create = await userController.createUser(mockRequest, mockResponse);
-    const response = create._getJSONData()
+    const response = create._getJSONData();
 
-    expect(response).toEqual({email: 'email', password: 'password'})
-})
+    expect(response).toEqual({email: 'email', password: 'password'});
+});
 
-describe('get user',  () => {
-    it('get user',  async () => {
+describe('get user', () => {
+    it('get user', async () => {
         const result = await UserHelper.encryptPassword(mockUser.password);
 
-        expect(result).toMatch('$2b$12$')
-    })
-})
+        expect(result).toMatch('$2b$12$');
+    });
+});

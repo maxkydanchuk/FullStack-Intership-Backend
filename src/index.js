@@ -6,6 +6,7 @@ import { PORT, DATABASE_URI } from "./config/config.js";
 import peopleRouter from "./libs/people/index.js";
 import starshipRouter from "./libs/starships/index.js";
 import userRouter from "./libs/users/index.js";
+import moviesRouter from "./libs/movies/index.js";
 import bodyParser from "body-parser";
 import * as http from "http";
 import webSocket from "./libs/chat/service.js";
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use(peopleRouter);
 app.use(starshipRouter);
 app.use(userRouter);
+app.use(moviesRouter);
 
 webSocket()
 
@@ -32,7 +34,6 @@ app.get('/', (req, res) => {
 
 app.use(function(req, res, err) {
     res.status(500).send('Something broke!');
-    console.error(err)
 });
 
 

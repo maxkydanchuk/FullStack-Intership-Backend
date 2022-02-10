@@ -2,43 +2,46 @@ import supertest from 'supertest';
 import {expect, jest} from '@jest/globals';
 import * as http from "http";
 import {Server} from "socket.io";
-import  Client  from "socket.io-client";
+import Client from "socket.io-client";
 import MockDb from "./__mocks__/mockDb.js";
 import ChatRepository from "./repository.js";
 
 // send messages test
 
-jest.mock( './service.js');
+jest.mock('./service.js');
 jest.mock('./repository.js');
 
 let mockDb;
 let chatRepository;
 
-const resultPromise = new Promise((resolve) => { resolve()});
+const resultPromise = new Promise((resolve) => {
+    resolve()
+});
 
 const mockMessage = {
     username: 'email',
     message: 'message'
-}
+};
 
 const mockResultMessage = {
     _id: 'id',
     username: 'email',
     message: 'message',
     time: 'time'
-}
+};
 
-beforeEach( () => {
-   mockDb = new MockDb;
-   chatRepository = new ChatRepository(mockDb)
+beforeEach(() => {
+    mockDb = new MockDb;
+    ;
+    chatRepository = new ChatRepository(mockDb);
 })
 
-it('check if getAllMessages returned equal value',  async () => {
+it('check if getAllMessages returned equal value', async () => {
 
     const result = await chatRepository.getAllMessages();
     const expectedResult = [mockResultMessage, mockResultMessage];
 
-    expect(result).toEqual(expectedResult)
+    expect(result).toEqual(expectedResult);
 })
 
 // websocket connect test
