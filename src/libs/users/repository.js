@@ -7,7 +7,7 @@ export default class UserRepository {
 
     async validateRegisterUser (body) {
         const { email, password, confirmPassword  } = body;
-        const user = await User.findOne({email: email});
+        const user = await User.findOne({where: { email: email}});
 
         if(user) {
             throw new Error('User with this email is already exists')
@@ -30,7 +30,7 @@ export default class UserRepository {
 
     async validateLoginUser(body) {
         const { email, password } = body;
-        const user = await User.findOne({email: email});
+        const user = await User.findOne({where: {email: email}});
 
         if (!user) {
             throw new Error ('User does not exist');
@@ -44,17 +44,17 @@ export default class UserRepository {
     };
 
     async getUser(email) {
-        return await User.findOne({email: email});
+        return await User.findOne({where : {email: email}});
     };
 
     async createUser(body) {
         const { email, password } = body;
         const hashedPassword = await UserHelper.encryptPassword(password);
-        const newUser = new User({
-            email: email,
+        const newUser = {
+            email,
             password: hashedPassword,
-        });
+        }
 
-        return await User.create(newUser);
+        return await User.create(newUser, {fields: ['email', 'password']});
     }
 }

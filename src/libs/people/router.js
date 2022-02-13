@@ -10,7 +10,7 @@ function PeopleRouter(controller) {
     });
 
     router.get('/api/people/:id', (req, res) => {
-        return controller.getPerson()(req, res);
+        return controller.getPerson(req, res);
     });
 
     router.post('/api/people/', verifyUser, (req, res) => {

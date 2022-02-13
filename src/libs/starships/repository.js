@@ -1,55 +1,52 @@
-import {ObjectId} from 'mongodb'
-import {escapeRegExp} from "../../utils/utils.js";
 import Starship from "./starship-model.js";
+import {Op} from "sequelize";
 
 export default class StarshipsRepository {
 
     async getAllStarships(sortBy, sortOrder, searchQuery, pageSize, pageNumber) {
         let totalCount = await Starship.count();
-        let options = {}
+        let options = {};
         let data;
+
         if (searchQuery !== undefined) {
-            options = {
-                "fields.starship_class": {$regex: escapeRegExp(searchQuery), $options: "i"}
+            options.where = {
+                starship_class: {
+                    [Op.like]: '%' + searchQuery + '%'
+                }
             }
         }
 
-        if ((sortBy === undefined || sortBy === 'fields.undefined') || (sortOrder === undefined || sortOrder === '')) {
-            const data = await Starship.find(options).skip(pageNumber * pageSize).limit(pageSize);
-
-            return {data, totalCount};
+        if (!isNaN(pageSize) && !isNaN(pageNumber)) {
+            options.limit = pageSize;
+            options.offset = pageSize * pageNumber
         }
 
-        data = await Starship.find(options).sort({[sortBy]: sortOrder}).skip(pageNumber * pageSize).limit(pageSize);
+        if ((sortBy !== undefined && sortBy !== 'fields.undefined') || (sortOrder !== undefined && sortOrder !== '')) {
+            options.order = [
+                [sortBy, sortOrder]
+            ]
+        }
+
+        data = await Starship.findAll(options);
 
         return {data, totalCount};
     };
 
     async getStarship(id) {
-        return await Starship.findOne({_id: new ObjectId(id)});
+        return await Starship.findOne({where: {id: id}});
     };
 
     async createStarship(body) {
-        const newStarship = new Starship({
-            fields: {
-                pilots: body.fields.pilots,
-                MGLT: body.fields.MGLT,
-                starship_class: body.fields.starship_class,
-                hyperdrive_rating: body.fields.hyperdrive_rating,
-            }
-        });
-
-        return await Starship.create(newStarship);
+        return await Starship.create(body, {fields: ['pilots', 'mglt', 'starship_class', 'hyperdrive_rating']});
     };
 
     async updateStarship(id, body) {
-        const result = await Starship.findOneAndUpdate({_id: new ObjectId(id)}, {$set: body});
-        const resultId = result._id;
+        await Starship.update(body, {where: {id: id}});
 
-        return await Starship.findOne({_id: resultId})
+        return await Starship.findOne({where: {id: id}});
     };
 
     async deleteStarship(id) {
-        return await Starship.findOneAndDelete({_id: new ObjectId(id)});
+        return await Starship.destroy({where: {id: id}})
     };
 }
