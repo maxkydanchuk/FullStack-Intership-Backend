@@ -4,7 +4,7 @@ import Movie from "./movie-model.js";
 
 export default class MoviesRepository {
 
-    async getAllPeople(sortBy, sortOrder, searchQuery, pageSize, pageNumber) {
+    async getAllMovies(sortBy, sortOrder, searchQuery, pageSize, pageNumber) {
 
         let totalCount = await Movie.count();
         let options = {};
