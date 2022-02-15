@@ -28,6 +28,9 @@ const Movie = sequelize.define('movie', {
         opening_crawl: {
             type: Sequelize.STRING
         },
+        length: {
+            type: Sequelize.STRING
+        },
     },
     {
         timestamps: false

@@ -12,6 +12,7 @@ import * as http from "http";
 import webSocket from "./libs/chat/service.js";
 import  mongoose from "mongoose";
 import {sequelize} from "./db.js";
+import statsRouter from "./libs/stats/index.js";
 
 const __dirname = path.resolve();
 const app = express();
@@ -25,6 +26,7 @@ app.use(peopleRouter);
 app.use(starshipRouter);
 app.use(userRouter);
 app.use(moviesRouter);
+app.use(statsRouter);
 
 webSocket()
 
