@@ -37,7 +37,7 @@ export default class PeopleRepository {
        try {
            return await Person.findOne({where: {id: id}});
        } catch (e) {
-           console.log(e)
+           return e;
        }
     };
 
