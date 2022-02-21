@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 export default class UserHelper {
 
     static createToken(user) {
-        return jwt.sign({userId: user._id}, secretKey, {expiresIn: "1h"});
+        return jwt.sign({userId: user.id}, secretKey, {expiresIn: "1h"});
     };
 
     static encryptPassword(password) {

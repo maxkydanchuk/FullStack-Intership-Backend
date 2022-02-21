@@ -1,6 +1,7 @@
 import {Server} from "socket.io";
 import {server} from "../../index.js";
 import ChatRepository from "./repository.js";
+import jwt from "jsonwebtoken";
 
 const chatRepository = new ChatRepository();
 
@@ -36,6 +37,7 @@ export default function webSocket() {
         });
 
         socket.on('sendMessage', async (message) => {
+            message.userId = (jwt.decode(message.token).userId);
             await chatRepository.createMessage(message);
         });
 

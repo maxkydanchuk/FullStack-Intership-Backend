@@ -10,7 +10,6 @@ import moviesRouter from "./libs/movies/index.js";
 import bodyParser from "body-parser";
 import * as http from "http";
 import webSocket from "./libs/chat/service.js";
-import  mongoose from "mongoose";
 import {sequelize} from "./db.js";
 
 const __dirname = path.resolve();
@@ -40,12 +39,7 @@ app.use(function(req, res, err) {
 
 async function start() {
     try {
-        // await mongoose.connect(DATABASE_URI, {
-        //     useNewUrlParser: true,
-        //     useUnifiedTopology: true,
-        //
-        // });
-        sequelize.authenticate().then(() => {
+        sequelize.authenticate().then( async () => {
             console.log('Connection has been established successfully.');
         });
         server.listen(PORT);

@@ -1,4 +1,4 @@
-import Message from "./message-model.js";
+import {Message} from '../associations.js'
 
 export default class ChatRepository {
 
@@ -7,6 +7,6 @@ export default class ChatRepository {
     };
 
     async createMessage(body) {
-        return await Message.create(body,{fields: ['username', 'message']});
+        return await Message.create(body, {fields: ['username', 'message', 'userId']})
     }
 };
