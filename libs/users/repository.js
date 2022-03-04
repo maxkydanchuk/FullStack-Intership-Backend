@@ -1,6 +1,7 @@
 import {ObjectId} from "mongodb";
 import {isValidEmail, isValidPassword} from "../../utils/utils.js";
 import bcrypt from "bcrypt";
+import UserHelper from "./user-helper/user-helper.js";
 
 export default class UserRepository {
     constructor(repositoryData) {
@@ -54,9 +55,8 @@ export default class UserRepository {
 
     async createUser(body) {
         const { email, password } = body;
-        const hashedPassword = await bcrypt.hash(password, 12);
+        const hashedPassword = await UserHelper.encryptPassword(password)
         const newUser = {email, password: hashedPassword};
-
         const createItem = await this.repositoryData.insertOne(newUser);
 
         return await this.getUserById(createItem.insertedId);

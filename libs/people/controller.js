@@ -1,21 +1,8 @@
+import PeopleHelper from "./people-helper/people-helper.js";
+
 export default class PeopleController {
     constructor(peopleRepository) {
         this.peopleRepository = peopleRepository;
-    }
-
-    getDataFromBody(body) {
-        return {
-            fields: {
-                name: body.fields.name,
-                gender: body.fields.gender,
-                skin_color: body.fields.skin_color,
-                hair_color: body.fields.hair_color,
-                height: body.fields.height,
-                eye_color: body.fields.eye_color,
-                mass: body.fields.mass,
-                birth_year: body.fields.birth_year
-            }
-        };
     }
 
     getAllPeople = async (req, res) => {
@@ -46,11 +33,10 @@ export default class PeopleController {
 
     createPerson = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
-            const createItem = await this.peopleRepository.createPerson(body)
-            const getItem = await this.peopleRepository.getPerson(createItem.insertedId)
+            const body = PeopleHelper.getDataFromBody(req.body);
+            const result = await this.peopleRepository.createPerson(body);
 
-            return res.status(201).json(getItem);
+            return res.status(201).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
@@ -58,7 +44,7 @@ export default class PeopleController {
 
     updatePerson = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
+            const body = PeopleHelper.getDataFromBody(req.body);
             const id = req.params.id;
             await this.peopleRepository.updatePerson(id, body);
             const getItem = await this.peopleRepository.getPerson(id);

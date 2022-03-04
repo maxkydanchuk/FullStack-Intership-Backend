@@ -37,8 +37,9 @@ export default class PeopleRepository {
             ...body,
             model: "resources.people",
         };
+        const createItem = await this.repositoryData.insertOne(newPerson);
 
-        return await this.repositoryData.insertOne(newPerson)
+        return await this.getPerson(createItem.insertedId);
     }
 
     async updatePerson(id, body) {
