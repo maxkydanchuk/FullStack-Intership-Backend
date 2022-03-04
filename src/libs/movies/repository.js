@@ -1,40 +1,39 @@
-import {ObjectId} from "mongodb";
-import {escapeRegExp} from '../../utils/utils.js'
 import Movie from "./movie-model.js";
+import {Op} from "sequelize";
 
 export default class MoviesRepository {
 
-    async getAllPeople(sortBy, sortOrder, searchQuery, pageSize, pageNumber) {
+    async getAllMovies(sortBy, sortOrder, searchQuery, pageSize, pageNumber) {
 
         let totalCount = await Movie.count();
         let options = {};
         let data;
+
         if (searchQuery !== undefined) {
-            options = {
-                "fields.name": {$regex: escapeRegExp(searchQuery), $options: "i"}
+            options.where = {
+                title: {
+                    [Op.like]: '%' + searchQuery + '%'
+                }
             }
         }
 
-        if (sortBy === undefined || sortOrder === undefined) {
-
-            data = await Movie
-                .find(options)
-                .skip(pageNumber * pageSize)
-                .limit(pageSize);
-
-            return {data, totalCount};
+        if (!isNaN(pageSize) && !isNaN(pageNumber)) {
+            options.limit = pageSize;
+            options.offset = pageSize * pageNumber
         }
 
-        data = await Movie
-            .find(options)
-            .skip(pageNumber * pageSize)
-            .limit(pageSize)
-            .sort({[sortBy]: sortOrder})
+        if ((sortBy !== undefined && sortBy !== 'fields.undefined') || (sortOrder !== undefined && sortOrder !== '')) {
+            options.order = [
+                [sortBy, sortOrder]
+            ]
+        }
+
+        data = await Movie.findAll(options);
 
         return {data, totalCount};
     }
 
     async getMovie(id) {
-        return await Movie.findOne({_id: new ObjectId(id)})
+        return await Movie.findOne({where: {id: id}})
     }
 }

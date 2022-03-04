@@ -1,10 +1,15 @@
-import { MongoClient } from "mongodb";
+import Sequelize from 'sequelize';
+import {POSTGRES_HOST, POSTGRES_URI} from "./config/config.js";
 
-const url = 'mongodb://localhost:27017/';
-const mongoClient = new MongoClient(url);
+export const sequelize = new Sequelize(
+    POSTGRES_URI, {
+        host: POSTGRES_HOST,
+        dialect: 'postgres',
+        pool: {
+            max: 5,
+            min: 0,
+            idle: 1000,
+        },
+        logging: false,
+    });
 
-mongoClient.connect()
-    .then((db) => db)
-    .catch((err) => console.log(err))
-
-export default mongoClient;

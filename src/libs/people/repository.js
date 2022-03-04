@@ -1,6 +1,5 @@
-import {ObjectId} from "mongodb";
-import {escapeRegExp} from '../../utils/utils.js'
 import Person from "./person-model.js";
+import {Op} from "sequelize";
 
 export default class PeopleRepository {
 
@@ -9,57 +8,51 @@ export default class PeopleRepository {
         let totalCount = await Person.count();
         let options = {};
         let data;
+
         if (searchQuery !== undefined) {
-            options = {
-                "fields.name": {$regex: escapeRegExp(searchQuery), $options: "i"}
+            options.where = {
+                name: {
+                    [Op.like]: '%' + searchQuery + '%'
+                }
             }
         }
 
-        if ((sortBy === undefined || sortBy === 'fields.undefined') || (sortOrder === undefined || sortOrder === '')) {
-            data = await Person
-                .find(options)
-                .skip(pageNumber * pageSize)
-                .limit(pageSize)
-
-            return {data, totalCount};
+        if (!isNaN(pageSize) && !isNaN(pageNumber)) {
+            options.limit = pageSize;
+            options.offset = pageSize * pageNumber
         }
 
-        data = await Person
-            .find(options)
-            .skip(pageNumber * pageSize)
-            .limit(pageSize)
-            .sort({[sortBy]: sortOrder});
+        if ((sortBy !== undefined && sortBy !== 'fields.undefined') || (sortOrder !== undefined && sortOrder !== '')) {
+            options.order = [
+                [sortBy, sortOrder]
+            ]
+        }
+
+        data = await Person.findAll(options);
 
         return {data, totalCount};
     };
 
     async getPerson(id) {
-        return await Person.findOne({_id: new ObjectId(id)})
+       try {
+           return await Person.findOne({where: {id: id}});
+       } catch (e) {
+           console.log(e)
+       }
     };
 
     async createPerson(body) {
-        const newPerson = new Person({
-            fields: {
-                name: body.fields.name,
-                birth_year: body.fields.birth_year,
-                gender: body.fields.gender,
-                eye_color: body.fields.eye_color,
-                height: body.fields.height,
-            }
-        });
-
-        return await Person.create(newPerson);
+        return await Person.create(body, {fields: ['name', 'birth_year', 'gender', 'eye_color', 'height']});
     }
 
     async updatePerson(id, body) {
-        const result = await Person.findOneAndUpdate({_id: new ObjectId(id)}, {$set: body});
-        const resultId = result._id;
+        await Person.update(body, {where: {id: id}});
 
-        return await Person.findOne({_id: resultId})
+        return await Person.findOne({where: {id: id}});
     };
 
     async deletePerson(id) {
-        return await Person.findOneAndDelete({_id: new ObjectId(id)});
+        return await Person.destroy({where: {id: id}})
 
     }
 }

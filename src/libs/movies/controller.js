@@ -11,7 +11,7 @@ export default class MoviesController {
             const pageSize = Number(req.query.size);
             const pageNumber = Number(req.query.page);
 
-            const result = await this.moviesRepository.getAllPeople(sortBy, sortOrder, searchQuery, pageSize, pageNumber);
+            const result = await this.moviesRepository.getAllMovies(sortBy, sortOrder, searchQuery, pageSize, pageNumber);
 
             return res.status(200).json(result);
         } catch (e) {

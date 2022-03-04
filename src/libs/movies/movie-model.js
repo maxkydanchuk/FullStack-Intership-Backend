@@ -1,20 +1,42 @@
-import pkg from 'mongoose';
+import Sequelize from 'sequelize';
+import {sequelize} from "../../db.js";
 
-const {Schema, model} = pkg;
+const Movie = sequelize.define('movie', {
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        producer: {
+            type: Sequelize.STRING,
+        },
+        title: {
+            type: Sequelize.STRING
+        },
+        episode_id: {
+            type: Sequelize.INTEGER
+        },
+        director: {
+            type: Sequelize.STRING
+        },
+        release_date: {
+            type: Sequelize.STRING
+        },
+        image_url: {
+            type: Sequelize.STRING
+        },
+        opening_crawl: {
+            type: Sequelize.STRING
+        },
+        length: {
+            type: Sequelize.STRING
+        },
+    },
+    {
+        timestamps: false
+    },
+    {
+        tableName: "movies"
+    })
 
-
-const movieSchema = new Schema({
-    fields: {
-        producer: String,
-        title: String,
-        episode_id: String,
-        director: String,
-        release_date: String,
-        image_url: String,
-        opening_crawl: String,
-    }
-})
-
-const Movie = model('Movie', movieSchema, 'movies');
-
-export default Movie
+export default Movie;

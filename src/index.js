@@ -11,6 +11,8 @@ import bodyParser from "body-parser";
 import * as http from "http";
 import webSocket from "./libs/chat/service.js";
 import  mongoose from "mongoose";
+import {sequelize} from "./db.js";
+import statsRouter from "./libs/stats/index.js";
 
 const __dirname = path.resolve();
 const app = express();
@@ -24,6 +26,7 @@ app.use(peopleRouter);
 app.use(starshipRouter);
 app.use(userRouter);
 app.use(moviesRouter);
+app.use(statsRouter);
 
 webSocket()
 
@@ -39,10 +42,13 @@ app.use(function(req, res, err) {
 
 async function start() {
     try {
-        await mongoose.connect(DATABASE_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-
+        // await mongoose.connect(DATABASE_URI, {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true,
+        //
+        // });
+        sequelize.authenticate().then(() => {
+            console.log('Connection has been established successfully.');
         });
         server.listen(PORT);
     } catch (e) {
