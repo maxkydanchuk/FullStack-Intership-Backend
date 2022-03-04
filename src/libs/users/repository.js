@@ -1,18 +1,16 @@
-import {ObjectId} from "mongodb";
 import {isValidEmail, isValidPassword} from "../../utils/utils.js";
 import bcrypt from "bcrypt";
+import UserHelper from "./user-helper/user-helper.js";
+import User from "./user-model.js";
 
 export default class UserRepository {
-    constructor(repositoryData) {
-        this.repositoryData = repositoryData.db('StarWarsDatabase').collection('users');
-    }
 
     async validateRegisterUser (body) {
         const { email, password, confirmPassword  } = body;
-        const user = await this.repositoryData.findOne({email: email});
+        const user = await User.findOne({email: email});
 
         if(user) {
-            throw new Error('user with this email is already exists')
+            throw new Error('User with this email is already exists')
         }
 
         if(!isValidEmail(email)) {
@@ -26,12 +24,13 @@ export default class UserRepository {
         if(password !== confirmPassword) {
             throw new Error ("Passwords didn't match")
         }
-        return true
-    }
+
+        return true;
+    };
 
     async validateLoginUser(body) {
         const { email, password } = body;
-        const user = await this.repositoryData.findOne({email: email});
+        const user = await User.findOne({email: email});
 
         if (!user) {
             throw new Error ('User does not exist');
@@ -42,24 +41,20 @@ export default class UserRepository {
         if(!isMatchPassword) {
             throw new Error ('Invalid password');
         }
-    }
+    };
 
     async getUser(email) {
-        return await this.repositoryData.findOne({email: email})
-    }
-
-    async getUserById(id) {
-        return await this.repositoryData.findOne({_id: new ObjectId(id)});
-    }
+        return await User.findOne({email: email});
+    };
 
     async createUser(body) {
         const { email, password } = body;
-        const hashedPassword = await bcrypt.hash(password, 12);
-        const newUser = {email, password: hashedPassword};
+        const hashedPassword = await UserHelper.encryptPassword(password);
+        const newUser = new User({
+            email: email,
+            password: hashedPassword,
+        });
 
-        const createItem = await this.repositoryData.insertOne(newUser);
-
-        return await this.getUserById(createItem.insertedId);
-
+        return await User.create(newUser);
     }
 }

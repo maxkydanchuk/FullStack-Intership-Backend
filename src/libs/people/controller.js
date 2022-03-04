@@ -3,21 +3,6 @@ export default class PeopleController {
         this.peopleRepository = peopleRepository;
     }
 
-    getDataFromBody(body) {
-        return {
-            fields: {
-                name: body.fields.name,
-                gender: body.fields.gender,
-                skin_color: body.fields.skin_color,
-                hair_color: body.fields.hair_color,
-                height: body.fields.height,
-                eye_color: body.fields.eye_color,
-                mass: body.fields.mass,
-                birth_year: body.fields.birth_year
-            }
-        };
-    }
-
     getAllPeople = async (req, res) => {
         try {
             const sortBy = req.query.sortBy;
@@ -31,43 +16,39 @@ export default class PeopleController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     getPerson = async (req, res) => {
         try {
-            const id = req.params.id
+            const id = req.params.id;
             const result = await this.peopleRepository.getPerson(id);
 
             return res.status(200).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     createPerson = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
-            const createItem = await this.peopleRepository.createPerson(body)
-            const getItem = await this.peopleRepository.getPerson(createItem.insertedId)
+            const result = await this.peopleRepository.createPerson(req.body);
 
-            return res.status(201).json(getItem);
+            return res.status(201).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     updatePerson = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
             const id = req.params.id;
-            await this.peopleRepository.updatePerson(id, body);
-            const getItem = await this.peopleRepository.getPerson(id);
+            const result = await this.peopleRepository.updatePerson(id, req.body);
 
-            return res.status(200).json(getItem);
+            return res.status(200).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     deletePerson = async (req, res) => {
         try {
@@ -79,4 +60,4 @@ export default class PeopleController {
             return await res.status(400).json(e);
         }
     }
-}
+};

@@ -1,20 +1,9 @@
 export default class StarshipsController {
-    constructor(starshipsRepository ) {
+    constructor(starshipsRepository) {
         this.starshipsRepository = starshipsRepository;
     }
 
-    getDataFromBody (body) {
-        return {
-            fields: {
-                pilots: body.fields.pilots,
-                MGLT: body.fields.MGLT,
-                starship_class: body.fields.starship_class,
-                hyperdrive_rating: body.fields.hyperdrive_rating,
-            }
-        };
-    }
-
-    getAllStarships = async (req, res) =>  {
+    getAllStarships = async (req, res) => {
         try {
             const sortBy = req.query.sortBy;
             const sortOrder = req.query.sortOrder;
@@ -27,7 +16,7 @@ export default class StarshipsController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     getStarship = async (req, res) => {
         try {
@@ -38,34 +27,30 @@ export default class StarshipsController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     createStarship = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
-            const createItem = await this.starshipsRepository.createStarship(body);
-            const getItem = await this.starshipsRepository.getStarship(createItem.insertedId);
+            const result = await this.starshipsRepository.createStarship(req.body);
 
-            return res.status(201).json(getItem);
+            return res.status(201).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
     updateStarship = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
             const id = req.params.id;
-            await this.starshipsRepository.updateStarship(id, body);
-            const getItem = await this.starshipsRepository.getStarship(id);
+            const result = await this.starshipsRepository.updateStarship(id, req.body);
 
-            return res.status(200).json(getItem);
+            return res.status(200).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 
-      deleteStarship = async (req, res) => {
+    deleteStarship = async (req, res) => {
         try {
             const id = req.params.id;
             await this.starshipsRepository.deleteStarship(id);
@@ -74,5 +59,5 @@ export default class StarshipsController {
         } catch (e) {
             return res.status(400).json(e);
         }
-    }
+    };
 }
