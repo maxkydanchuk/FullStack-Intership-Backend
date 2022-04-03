@@ -1,4 +1,5 @@
 import UserHelper from "./user-helper/user-helper.js";
+import UserValidation from "./user-helper/user-validation.js";
 
 export default class UserController {
     constructor(userRepository) {
@@ -9,7 +10,7 @@ export default class UserController {
         try {
             const body = req.body;
             const {email} = body;
-            await this.userRepository.validateLoginUser(body);
+            await UserValidation.validateLoginUser(body);
             const result = await this.userRepository.getUser(body.email);
             const token = UserHelper.createToken(result).toString();
 
@@ -21,7 +22,7 @@ export default class UserController {
 
     createUser = async (req, res) => {
         try {
-            await this.userRepository.validateRegisterUser(req.body);
+            await UserValidation.validateRegisterUser(req.body);
             const result = await this.userRepository.createUser(req.body);
 
             return res.status(201).json(result);
