@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import {secretKey} from "../config/config.js";
 
 const verifyUser = (req, res, next) => {
-
     let token = req.get('x-access-token');
 
     if (!token) {
