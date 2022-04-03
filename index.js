@@ -6,7 +6,6 @@ import peopleRouter from "./libs/people/index.js";
 import starshipRouter from "./libs/starships/index.js";
 import userRouter from "./libs/users/index.js";
 import bodyParser from "body-parser";
-import chatRouter from "./libs/chat/index.js";
 import * as http from "http";
 import webSocket from "./libs/chat/service.js";
 
