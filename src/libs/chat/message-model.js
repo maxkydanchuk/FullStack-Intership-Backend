@@ -11,7 +11,7 @@ const Message = sequelize.define('message', {
             type: Sequelize.STRING,
         },
         message: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
         },
         updatedAt: {
             type: Sequelize.DATE,
@@ -27,18 +27,3 @@ const Message = sequelize.define('message', {
     })
 
 export default Message;
-
-
-// import pkg from 'mongoose';
-//
-// const {Schema, model} = pkg;
-//
-// const messageSchema = new Schema({
-//     username: String,
-//     message: String,
-//     time: String
-// });
-//
-// const Message = model('Message', messageSchema, 'chat');
-//
-// export default Message;
