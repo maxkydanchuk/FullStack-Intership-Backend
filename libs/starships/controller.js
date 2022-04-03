@@ -1,17 +1,8 @@
+import StarshipHelper from "./starship-helper/starship-helper.js";
+
 export default class StarshipsController {
     constructor(starshipsRepository ) {
         this.starshipsRepository = starshipsRepository;
-    }
-
-    getDataFromBody (body) {
-        return {
-            fields: {
-                pilots: body.fields.pilots,
-                MGLT: body.fields.MGLT,
-                starship_class: body.fields.starship_class,
-                hyperdrive_rating: body.fields.hyperdrive_rating,
-            }
-        };
     }
 
     getAllStarships = async (req, res) =>  {
@@ -42,11 +33,10 @@ export default class StarshipsController {
 
     createStarship = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
-            const createItem = await this.starshipsRepository.createStarship(body);
-            const getItem = await this.starshipsRepository.getStarship(createItem.insertedId);
+            const body = StarshipHelper.getDataFromBody(req.body);
+            const result = await this.starshipsRepository.createStarship(body)
 
-            return res.status(201).json(getItem);
+            return res.status(201).json(result);
         } catch (e) {
             return res.status(400).json(e);
         }
@@ -54,7 +44,7 @@ export default class StarshipsController {
 
     updateStarship = async (req, res) => {
         try {
-            const body = this.getDataFromBody(req.body);
+            const body = StarshipHelper.getDataFromBody(req.body);
             const id = req.params.id;
             await this.starshipsRepository.updateStarship(id, body);
             const getItem = await this.starshipsRepository.getStarship(id);

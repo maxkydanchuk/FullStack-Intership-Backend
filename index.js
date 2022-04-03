@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
     res.status(500).send('Something broke!');
     console.error(err)
 });
