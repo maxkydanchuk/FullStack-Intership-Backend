@@ -9,7 +9,6 @@ import bodyParser from "body-parser";
 import * as http from "http";
 import webSocket from "./libs/chat/service.js";
 
-
 const __dirname = path.resolve();
 const app = express();
 export const server = http.createServer(app);
