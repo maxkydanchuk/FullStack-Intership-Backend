@@ -6,8 +6,8 @@ import peopleRouter from "./libs/people/index.js";
 import starshipRouter from "./libs/starships/index.js";
 import userRouter from "./libs/users/index.js";
 import bodyParser from "body-parser";
-import * as http from "http";
 import webSocket from "./libs/chat/service.js";
+import * as http from "http";
 
 const __dirname = path.resolve();
 const app = express();
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use(function(err, req, res) {
+app.use(function(req, res, err) {
     res.status(500).send('Something broke!');
     console.error(err)
 });

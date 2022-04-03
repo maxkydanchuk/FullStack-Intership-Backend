@@ -4,8 +4,12 @@ import ChatRepository from "./repository.js";
 import mongoClient from "../../db.js";
 import ChatHelper from "./chat-helper/chat-helper.js";
 
-const chatRepository = new ChatRepository(mongoClient)
+const db = mongoClient.db('StarWarsDatabase').collection('chat');
+
+const chatRepository = new ChatRepository(db);
+
 let users = [];
+
 export default function webSocket() {
 
     const io = new Server(server, {
